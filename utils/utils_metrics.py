@@ -79,7 +79,10 @@ def compute_mIoU(gt_dir, pred_dir, png_name_list, num_classes, name_classes):
         #------------------------------------------------#
         #   读取一张对应的标签，转化成numpy数组
         #------------------------------------------------#
-        label = np.array(Image.open(gt_imgs[ind]))  
+        label = np.array(Image.open(gt_imgs[ind]))
+        # WHDLD labels are 1-6. Shift them to 0-5 to match predictions which are 0-5.
+        label = label - 1
+        label[label < 0] = 0 # Safety measure just in case
 
         # 如果图像分割结果与标签的大小不一样，这张图片就不计算
         if len(label.flatten()) != len(pred.flatten()):  

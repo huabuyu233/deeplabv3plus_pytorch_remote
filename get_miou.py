@@ -20,13 +20,13 @@ if __name__ == "__main__":
     #---------------------------------------------------------------------------#
     miou_mode       = 0
     #------------------------------#
-    #   分类个数+1、如2+1
+    #   分类个数、因为没有背景，所以就是6
     #------------------------------#
-    num_classes     = 21
+    num_classes     = 6
     #--------------------------------------------#
     #   区分的种类，和json_to_dataset里面的一样
     #--------------------------------------------#
-    name_classes    = ["background","aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
+    name_classes    = ["bare soil", "building", "pavement", "road", "vegetation", "water"]
     # name_classes    = ["_background_","cat","dog"]
     #-------------------------------------------------------#
     #   指向VOC数据集所在的文件夹
@@ -44,7 +44,12 @@ if __name__ == "__main__":
             os.makedirs(pred_dir)
             
         print("Load model.")
-        deeplab = DeeplabV3()
+        deeplab = DeeplabV3(
+            model_path='logs/v1_ep200-loss0.543-val_loss0.534.pth',
+            num_classes=6,              # 与训练时的设置一致
+            downsample_factor=8,        #与train.py中的设置一致
+            input_shape=(256, 256),      #与train.py中的设置一致
+        )
         print("Load model done.")
 
         print("Get predict result.")
@@ -57,6 +62,10 @@ if __name__ == "__main__":
 
     if miou_mode == 0 or miou_mode == 2:
         print("Get miou.")
+
+        # WHDLD dataset validation labels have values 1-6, adjust prediction results to 1-6
+        # so they can be matched to gt images for mIoU calculate
+
         hist, IoUs, PA_Recall, Precision = compute_mIoU(gt_dir, pred_dir, image_ids, num_classes, name_classes)  # 执行计算mIoU的函数
         print("Get miou done.")
         show_results(miou_out_path, hist, IoUs, PA_Recall, Precision, name_classes)

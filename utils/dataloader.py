@@ -35,7 +35,7 @@ class DeeplabDataset(Dataset):
         jpg, png    = self.get_random_data(jpg, png, self.input_shape, random = self.train)
 
         jpg         = np.transpose(preprocess_input(np.array(jpg, np.float64)), [2,0,1])
-        png         = np.array(png)
+        png         = np.array(png) - 1 # WHDLD dataset labels are 1-6, change to 0-5
         png[png >= self.num_classes] = self.num_classes
         #-------------------------------------------------------#
         #   转化成one_hot的形式
