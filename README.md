@@ -1,6 +1,6 @@
 ## DeepLabv3+：Encoder-Decoder with Atrous Separable Convolution语义分割模型在Pytorch当中的实现
-该仓库fork自https://github.com/bubbliiiing/deeplabv3-plus-pytorch.git
-remote为我编辑的，bilbil分支已弃用，main分支为原仓库
+该仓库fork自https://github.com/bubbliiiing/deeplabv3-plus-pytorch.git           
+remote分支为我编辑的，main分支为原仓库
 该仓库后续所有更新存储于https://gitee.com/hnylmy/deeplabv3-plus-pytorch.git
 ---
 
